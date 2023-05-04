@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  MyHabit
 //
-//  Created by Юлия Кагирова on 04.05.2023.
+//  Created by Юлия Кагирова on 24.04.2023.
 //
 
 import UIKit
@@ -11,9 +11,9 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+       
+            view.backgroundColor = .gray
+        }
     }
 
-
-}
 
