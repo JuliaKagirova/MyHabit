@@ -163,7 +163,7 @@ class HabitView: UIView {
             updateDateDescription()
         }
     }
-    
+
     @objc private func del() {
         weak var weakSelf = self
         let alert = UIAlertController(title: "Удалить привычку",

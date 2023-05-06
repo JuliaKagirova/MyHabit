@@ -74,7 +74,7 @@ extension ProgressCollectionViewCell: CellProtocol {
             progress.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 236),
             progress.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -12),
             progress.bottomAnchor.constraint(equalTo: backgroudViewProgress.bottomAnchor, constant: -32),
-            
+        
             progressBar.topAnchor.constraint(equalTo: backgroudViewProgress.topAnchor, constant: 38),
             progressBar.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 12),
             progressBar.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -12),

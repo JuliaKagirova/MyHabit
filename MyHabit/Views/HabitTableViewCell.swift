@@ -50,7 +50,7 @@ class HabitTableViewCell: UITableViewCell {
         ])
     }
 }
-
+ 
 extension HabitTableViewCell: CellProtocol {
     typealias CellType = CellModel
     static var reuseId: String { String(describing: self) }

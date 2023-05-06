@@ -115,6 +115,6 @@ extension HabitCollectionViewCell: CellProtocol {
             checkButton.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
-    
+     
     func updateCell(object: HabitModel) { self.data = object }
 }

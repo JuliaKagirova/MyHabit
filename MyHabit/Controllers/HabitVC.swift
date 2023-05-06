@@ -92,7 +92,7 @@ extension HabitVC: UITableViewDataSource {
         return cell
     }
 }
-
+ 
 extension HabitVC: Delegate {
     func updateData() {
         data.updateData()

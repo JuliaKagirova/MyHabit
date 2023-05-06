@@ -15,7 +15,7 @@ public class Habit: Codable {
     
     /// Время выполнения привычки.
     public var date: Date
-
+ 
     public var count: Int
     
     /// Даты выполнения привычки.

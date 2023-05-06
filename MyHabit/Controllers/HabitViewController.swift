@@ -65,7 +65,7 @@ class HabitViewController: UIViewController {
         self.navigationController?.pushViewController(habitsVC, animated: true)
     }
 }
-
+ 
 extension HabitViewController: Delegate {
     
     func updateData() {

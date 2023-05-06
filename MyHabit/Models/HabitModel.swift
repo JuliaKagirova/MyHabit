@@ -8,7 +8,7 @@
 import UIKit
 
 struct HabitModel {
-    
+     
     let id: Int?
     var name: String
     var date: Date

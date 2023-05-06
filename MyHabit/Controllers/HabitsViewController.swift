@@ -146,7 +146,7 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         ? UIEdgeInsets(top: 22, left: 16, bottom: 0, right: 16)
         : UIEdgeInsets(top: 18, left: 16, bottom: 22, right: 16)
     }
-}
+} 
 
 extension HabitsViewController: Delegate {
     

@@ -10,7 +10,7 @@ import UIKit
 protocol CellProtocol {
     
     associatedtype CellType
-    
+
     static var reuseId: String { get }
     
     func layoutUpdate()

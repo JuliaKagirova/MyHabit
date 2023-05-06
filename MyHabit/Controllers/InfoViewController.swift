@@ -55,7 +55,7 @@ class InfoViewController: UIViewController, UIScrollViewDelegate {
             label.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 16),
             label.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
         ])
-    }
+    } 
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(descriptionName)
