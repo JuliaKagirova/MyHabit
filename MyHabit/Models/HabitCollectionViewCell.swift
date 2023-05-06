@@ -2,99 +2,119 @@
 //  HabitCollectionViewCell.swift
 //  MyHabit
 //
-//  Created by Юлия Кагирова on 01.05.2023.
+//  Created by Юлия Кагирова on 06.05.2023.
 //
 
 import UIKit
 
 class HabitCollectionViewCell: UICollectionViewCell {
-    static let id = "HabitCollectionViewCell"
-
-    private var backgroudView: UIView = {
-        var view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 10
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    private var labelWater:UILabel = {
-        var label = UILabel()
-        label.text = "Выпить стакан воды"
-        label.font = UIFont.systemFont(ofSize: 17, weight: .medium)
-        label.textColor = .systemBlue
+    
+    weak var delegate: Delegate?
+    private var data: HabitModel = HabitModel() {
+        didSet {
+            nameLabel.text = data.name
+            nameLabel.textColor = data.color
+            if let habit = data.getHabit() {
+                dateLabel.text = habit.dateString
+                updateCheckButton(habit: habit)
+                updateDescriptionLabel(habit: habit)
+            }
+        }
+    }
+    private lazy var nameLabel: UILabel = {
+        var label = UILabel(frame: .zero)
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private var placeHolder:UILabel = {
-        var label = UILabel()
-        label.text = "Каждый день в 07:30"
-        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
-        label.textColor = .darkGray
+    private lazy var dateLabel: UILabel = {
+        var label = UILabel(frame: .zero)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .lightGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private var countLabel:UILabel = {
-        var label = UILabel()
-        label.text = "Счётчик: 0"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .light)
-        label.textColor = .darkGray
+    private lazy var descriptionLabel: UILabel = {
+        var label = UILabel(frame: .zero)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .gray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    private var colorCircle: UIButton = {
-        var circle = UIButton()
-        circle.backgroundColor = .clear
-        circle.layer.borderColor = UIColor.systemBlue.cgColor
-        circle.layer.borderWidth = 1
-        circle.layer.cornerRadius = 18
-        circle.addTarget(HabitCollectionViewCell.self, action: #selector(addHabit), for: .touchUpInside)
-        circle.translatesAutoresizingMaskIntoConstraints = false
-        return circle
+    private lazy var checkButton: UIButton = {
+        var button = UIButton(frame: .zero)
+        button.addTarget(self, action: #selector(checkHabit), for: .touchUpInside)
+        button.tintColor = .systemBackground
+        button.layer.cornerRadius = 18
+        button.layer.borderWidth = 3
+        button.clipsToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
+        layoutUpdate()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupUI() {
-        contentView.addSubview(backgroudView)
-        backgroudView.addSubview(labelWater)
-        backgroudView.addSubview(placeHolder)
-        backgroudView.addSubview(countLabel)
-        backgroudView.addSubview(colorCircle)
-        NSLayoutConstraint.activate([
-            backgroudView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 38),
-            backgroudView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            backgroudView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            backgroudView.widthAnchor.constraint(equalToConstant: 360),
-            backgroudView.heightAnchor.constraint(equalToConstant: 130),
+    private func updateCheckButton(habit: Habit) {
+        if (habit.isAlreadyTakenToday != false) {
+            checkButton.backgroundColor = habit.color
+            checkButton.layer.borderColor = habit.color.cgColor
+            checkButton.setImage(UIImage(systemName: "checkmark"), for: .normal)
+        } else {
+            checkButton.backgroundColor = nil
+            checkButton.layer.borderColor = habit.color.cgColor
+            checkButton.setImage(nil, for: .normal)
+        }
+    }
+    
+    private func updateDescriptionLabel(habit: Habit) {
+        descriptionLabel.text = "Счётчик: \(habit.trackDates.count)"
+    }
+    @objc private func checkHabit() {
+        if let habit = data.getHabit(), habit.isAlreadyTakenToday == false {
+            HabitsStore.shared.track(habit)
+            delegate?.updateData()
+        }
+    }
+}
 
-            labelWater.topAnchor.constraint(equalTo: backgroudView.topAnchor, constant: 20),
-            labelWater.leadingAnchor.constraint(equalTo: backgroudView.leadingAnchor, constant: 20),
-            labelWater.trailingAnchor.constraint(equalTo: backgroudView.trailingAnchor, constant: -103),
-            labelWater.bottomAnchor.constraint(equalTo: backgroudView.bottomAnchor, constant: -88),
+extension HabitCollectionViewCell: CellProtocol {
+    typealias CellType = HabitModel
+    static var reuseId: String { String(describing: self) }
+    
+    func layoutUpdate() {
+        contentView.backgroundColor = .systemBackground
+        contentView.layer.cornerRadius = 8
+        contentView.clipsToBounds = true
+        [nameLabel, dateLabel, descriptionLabel, checkButton].forEach { sub in
+            contentView.addSubview(sub)
+        }
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            nameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.7),
             
-            placeHolder.topAnchor.constraint(equalTo: labelWater.bottomAnchor, constant: 4),
-            placeHolder.leadingAnchor.constraint(equalTo: backgroudView.leadingAnchor, constant: 20),
-            placeHolder.trailingAnchor.constraint(equalTo: backgroudView.trailingAnchor, constant: -206),
-            placeHolder.bottomAnchor.constraint(equalTo: backgroudView.bottomAnchor, constant: -68),
+            dateLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            dateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            dateLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
             
-            countLabel.topAnchor.constraint(equalTo: placeHolder.bottomAnchor, constant: 30),
-            countLabel.leadingAnchor.constraint(equalTo: backgroudView.leadingAnchor, constant: 20),
+            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            descriptionLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 20),
+            descriptionLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
             
-            colorCircle.topAnchor.constraint(equalTo: backgroudView.topAnchor, constant: 47),
-            colorCircle.trailingAnchor.constraint(equalTo: backgroudView.trailingAnchor, constant: -26),
-            colorCircle.widthAnchor.constraint(equalToConstant: 36),
-            colorCircle.heightAnchor.constraint(equalToConstant: 36)
+            checkButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -26),
+            checkButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            checkButton.widthAnchor.constraint(equalToConstant: 36),
+            checkButton.heightAnchor.constraint(equalToConstant: 36)
         ])
     }
-    @objc func addHabit(sender: UIButton) {
-        // при нажатии должна появиться галочка в кружке, покраситься в синий и выйти окно правок
-        colorCircle.backgroundColor = .systemBlue
-        colorCircle.setImage(UIImage(systemName: "checkmark"), for: .normal)
-
-    }
+    
+    func updateCell(object: HabitModel) { self.data = object }
 }

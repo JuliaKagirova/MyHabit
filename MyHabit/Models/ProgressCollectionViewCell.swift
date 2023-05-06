@@ -16,7 +16,6 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
-    
     private var labelProgress:UILabel = {
         var label = UILabel()
         label.text = "Всё получится!"
@@ -41,44 +40,52 @@ class ProgressCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupUI()
+        layoutUpdate()
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+extension ProgressCollectionViewCell: CellProtocol {
+    typealias CellType = Float
+    static var reuseId: String { String(describing: self) }
     
-    func setupUI() {
-        contentView.addSubview(backgroudViewProgress)
-        backgroudViewProgress.addSubview(labelProgress)
-        backgroudViewProgress.addSubview(progressBar)
-        backgroudViewProgress.addSubview(progress)
-
+    func layoutUpdate() {
+        [backgroudViewProgress, labelProgress, progress, progressBar].forEach { sub in
+            addSubview(sub)
+        }
         NSLayoutConstraint.activate([
-            backgroudViewProgress.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 21),
-            backgroudViewProgress.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            backgroudViewProgress.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            backgroudViewProgress.widthAnchor.constraint(equalToConstant: 360),
+            backgroudViewProgress.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0),
+            backgroudViewProgress.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            backgroudViewProgress.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            backgroudViewProgress.widthAnchor.constraint(equalToConstant: 380),
             backgroudViewProgress.heightAnchor.constraint(equalToConstant: 60),
-
+            
             labelProgress.topAnchor.constraint(equalTo: backgroudViewProgress.topAnchor, constant: 10),
             labelProgress.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 12),
             labelProgress.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -115),
-            labelProgress.bottomAnchor.constraint(equalTo: backgroudViewProgress.bottomAnchor, constant: -32),
-            
-            progressBar.topAnchor.constraint(equalTo: labelProgress.bottomAnchor, constant: 10),
-            progressBar.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 12),
-            progressBar.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -12),
             
             progress.topAnchor.constraint(equalTo: backgroudViewProgress.topAnchor, constant: 10),
+            progress.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 236),
             progress.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -12),
-            progress.widthAnchor.constraint(equalTo: labelProgress.widthAnchor)
+            progress.bottomAnchor.constraint(equalTo: backgroudViewProgress.bottomAnchor, constant: -32),
             
+            progressBar.topAnchor.constraint(equalTo: backgroudViewProgress.topAnchor, constant: 38),
+            progressBar.leadingAnchor.constraint(equalTo: backgroudViewProgress.leadingAnchor, constant: 12),
+            progressBar.trailingAnchor.constraint(equalTo: backgroudViewProgress.trailingAnchor, constant: -12),
+            progressBar.bottomAnchor.constraint(equalTo: backgroudViewProgress.bottomAnchor, constant: -15),
+            progressBar.widthAnchor.constraint(equalToConstant: 319),
+            progressBar.heightAnchor.constraint(equalToConstant: 7)
         ])
     }
+    
     func updateCell(object: Float) {
         progressBar.progress = object
-        labelProgress.text = String(format: "%.0f %%", object * 100)
+        progress.text = String(format: "%.0f %%", object * 100)
     }
 }

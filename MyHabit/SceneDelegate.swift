@@ -11,7 +11,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     
-    
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -37,12 +36,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 tag: 1
             )
             return UINavigationController(rootViewController: InfoViewController)
-            
         }
+        
         func createTabBarController() -> UITabBarController {
             let tabBarController = UITabBarController()
             tabBarController.viewControllers = [createHabitsViewController(), createInfoViewController()]
             UITabBar.appearance().backgroundColor = .systemGray3
+            UITabBar.appearance().tintColor = .purple
             return tabBarController
         }
     }
@@ -62,7 +62,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     func sceneDidEnterBackground(_ scene: UIScene) {
     }
-    
-    
 }
 

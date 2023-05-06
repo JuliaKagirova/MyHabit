@@ -14,9 +14,9 @@ public class Habit: Codable {
     public var name: String
     
     /// Время выполнения привычки.
-//    public var date: Date
     public var date: Date
 
+    public var count: Int
     
     /// Даты выполнения привычки.
     public var trackDates: [Date]
@@ -66,9 +66,10 @@ public class Habit: Codable {
     
     private lazy var calendar: Calendar = .current
     
-    public init(name: String, date: Date, trackDates: [Date] = [], color: UIColor) {
+    public init(name: String, date: Date, trackDates: [Date] = [], color: UIColor, count: Int) {
         self.name = name
         self.date = date
+        self.count = count
         self.trackDates = trackDates
         var r: CGFloat = 0
         var g: CGFloat = 0
@@ -86,6 +87,7 @@ extension Habit: Equatable {
     
     public static func == (lhs: Habit, rhs: Habit) -> Bool {
         lhs.name == rhs.name &&
+        lhs.count == rhs.count &&
         lhs.date == rhs.date &&
         lhs.trackDates == rhs.trackDates &&
         lhs.r == rhs.r &&

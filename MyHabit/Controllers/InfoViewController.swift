@@ -25,7 +25,6 @@ class InfoViewController: UIViewController, UIScrollViewDelegate {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.frame = CGRect(x: 0, y: 0, width: 300, height: 400)
@@ -40,9 +39,9 @@ class InfoViewController: UIViewController, UIScrollViewDelegate {
         scrollView.scrollsToTop = true
         return scrollView
     }()
-  
+    
     override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         self.title = "Информация"
         setupLabel()
         setupUI()
@@ -60,7 +59,6 @@ class InfoViewController: UIViewController, UIScrollViewDelegate {
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(descriptionName)
-        
         NSLayoutConstraint.activate([
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
